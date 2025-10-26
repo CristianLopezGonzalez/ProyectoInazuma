@@ -1,0 +1,106 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  background-color: #f4f6f9;
+}
+
+/* Contenedor principal */
+.menu-desplegable {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  z-index: 200;
+}
+
+/* Imagen del botón */
+.boton-menu {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  height: 50px;
+  cursor: pointer;
+  z-index: 200;
+  transition: transform 0.2s ease;
+}
+
+.boton-menu:hover {
+  transform: scale(1.05);
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+/* Menú lateral */
+.navegador-contenedor {
+  position: fixed;
+  top: 0px;
+  right: -100%;
+  width: 350px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-top: 80px;
+  transition: right 0.3s ease;
+  z-index: 150;
+}
+
+
+.navegador-contenedor.activo {
+  right: 0;
+}
+
+/* Lista de enlaces */
+.navegador-enlaces {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.navegador-links {
+  margin: 10px 0;
+  text-align: right;
+}
+
+/* Enlaces */
+.enlace {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  padding: 12px 20px;
+  border-radius: 6px 0 0 6px;
+  display: inline-block;
+  width: 30%;
+  transition: all 0.3s ease;
+}
+
+.enlace:hover {
+
+  color: #597ebd;
+  transform: translateX(-6px);
+}
+
+.enlace-cerrar {
+  text-decoration: none;
+  color: rgb(255, 0, 0);
+  padding: 12px 20px;
+  border-radius: 6px 0 0 6px;
+  display: inline-block;
+  width: 30%;
+  transition: all 0.3s ease;
+}
+
+.enlace-cerrar:hover {
+  color: #ff0000;
+  transform: translateX(-6px);
+}
