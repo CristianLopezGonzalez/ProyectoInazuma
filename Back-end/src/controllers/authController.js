@@ -151,8 +151,6 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
     try {
         
-        
-
         res.json({
             success: true,
             message: 'Logout exitoso'
