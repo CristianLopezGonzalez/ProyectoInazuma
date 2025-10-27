@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
-import './navbar.css';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import "./navbar.css";
 import { useState } from "react";
 
 const Navbar = () => {
   const [menu, setMenu] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -12,35 +13,32 @@ const Navbar = () => {
 
   const cerrarSesion = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
-      const response = await fetch('http://localhost:3000/api/auth/logout', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await fetch("http://localhost:3000/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const data = await response.json();
 
       if (data.success) {
-        
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        
-        
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
         setMenu(false);
-        navigate('/login');
+        navigate("/login");
       }
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      console.error("Error al cerrar sesión:", error);
     }
   };
 
   return (
     <div className="menu-desplegable">
-     
       <img
         src="btn_menu_sp.png"
         alt="boton"
@@ -48,33 +46,68 @@ const Navbar = () => {
         onClick={toggleMenu}
       />
 
-
       {menu && <div className="backdrop" onClick={toggleMenu}></div>}
-
 
       <div className={`navegador-contenedor ${menu ? "activo" : ""}`}>
         <ul className="navegador-enlaces">
-
           <li className="navegador-links">
-            <Link className="enlace" to={"/juegadores"} onClick={toggleMenu}>Jugadores</Link>
+            <Link
+              className={location.pathname === "/home" ? "enlaceActivo" : "enlace"}
+              to={"/home"}
+              onClick={toggleMenu}>
+              Home
+            </Link>
           </li>
 
           <li className="navegador-links">
-            <Link className="enlace" to={"/objetos"} onClick={toggleMenu}>Objetos</Link>
+            <Link
+              className={location.pathname === "/jugadores" ? "enlaceActivo" : "enlace"}
+              to={"/jugadores"}
+              onClick={toggleMenu}>
+              Jugadores
+            </Link>
           </li>
 
           <li className="navegador-links">
-            <Link className="enlace" to={"/equipos"} onClick={toggleMenu}>Equipos</Link>
+            <Link
+              className={
+                location.pathname === "/objetos" ? "enlaceActivo" : "enlace"
+              }
+              to={"/objetos"}
+              onClick={toggleMenu}
+            >
+              Objetos
+            </Link>
           </li>
 
           <li className="navegador-links">
-            <Link className="enlace" to={"/crearEquipo"} onClick={toggleMenu}>Crear Equipo</Link>
+            <Link
+              className={
+                location.pathname === "/equipos" ? "enlaceActivo" : "enlace"
+              }
+              to={"/equipos"}
+              onClick={toggleMenu}
+            >
+              Equipos
+            </Link>
           </li>
 
           <li className="navegador-links">
-            <Link className="enlace-cerrar" to={"/crearEquipo"} onClick={cerrarSesion}>Cerrar Sesion</Link>
+            <Link className={location.pathname === "/CrearEquipo" ? "enlaceActivo" : "enlace"} 
+            to={"/crearEquipo"} onClick={toggleMenu}>
+              Crear Equipo
+            </Link>
           </li>
 
+          <li className="navegador-links">
+            <Link
+              className="enlace-cerrar"
+              
+              onClick={cerrarSesion}
+            >
+              Cerrar Sesion
+            </Link>
+          </li>
         </ul>
       </div>
     </div>

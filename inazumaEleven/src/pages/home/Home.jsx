@@ -6,8 +6,12 @@ import "./home.css";
 
 const Home = () => {
   return (
+
+    
     <div className="home-contendor">
+        
       <div className="home-imagenes">
+          <div className="home-logo"><img src="logoIna.png" alt="img" /></div>
         <Swiper
           modules={[Autoplay, EffectFade]}
           autoplay={{delay: 2000,disableOnInteraction: false,}}
@@ -21,6 +25,12 @@ const Home = () => {
           <SwiperSlide> <img src="fondo3.webp" alt="foto 3" /> </SwiperSlide>
         </Swiper>
       </div>
+
+      <div>
+
+        <h1>lo</h1>
+      </div>
+
     </div>
   );
 }

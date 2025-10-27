@@ -86,9 +86,21 @@ body {
 
 .enlace:hover {
 
-  color: #597ebd;
-  transform: translateX(-6px);
+  color: rgb(7,189,241);
+  transform: translateX(-20px);
 }
+
+.enlaceActivo{
+  text-decoration: none;
+  color: rgb(7,189,241);
+  padding: 12px 20px;
+  border-radius: 6px 0 0 6px;
+  display: inline-block;
+  width: 30%;
+  transform: translateX(-20px);
+}
+
+
 
 .enlace-cerrar {
   text-decoration: none;
@@ -102,5 +114,5 @@ body {
 
 .enlace-cerrar:hover {
   color: #ff0000;
-  transform: translateX(-6px);
+  transform: translateX(-20px);
 }
