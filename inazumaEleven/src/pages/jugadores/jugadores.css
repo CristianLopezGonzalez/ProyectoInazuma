@@ -1,0 +1,40 @@
+.players-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.cards-contenedor {
+    display: flex;
+    background-color: lightgray;
+    
+}
+
+.tarjeta-player{
+    background-color: aqua;
+    width: 700px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.foto-player{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    width: 300px;
+}
+.foto{
+    background-color: rgb(49, 149, 216);
+    border-radius: 300px;
+}
+
+.nombre-Player{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: aquamarine;
+}

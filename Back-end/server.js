@@ -5,6 +5,12 @@ import {connectDB} from './src/config/db.js';
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Configuración para ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Importar rutas
 import authRoutes from './src/routes/authRoutes.js';
@@ -19,22 +25,26 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+
+// CORS - Debe ir ANTES de las rutas estáticas
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
 }));
 
+app.use(express.static(path.join(__dirname, 'src/public')));
+
+
+
 // Conectar a la base de datos
 connectDB();
 
-// Rutas
+// Rutas de la API
 app.use('/api/auth', authRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api/emblems', emblemRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/users', userRoutes);
-
 
 // Manejo de errores 404
 app.use((req, res) => {

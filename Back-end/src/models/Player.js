@@ -32,14 +32,13 @@ const playerSchema = new mongoose.Schema({
     },
     
     stats: {
-        kick: { type: Number, default: 0 },
-        dribble: { type: Number, default: 0 },
-        block: { type: Number, default: 0 },
-        catch: { type: Number, default: 0 },
-        speed: { type: Number, default: 0 },
-        stamina: { type: Number, default: 0 },
-        guts: { type: Number, default: 0 },
-        freedom: { type: Number, default: 0 }
+        Technique: { type: Number, default: 0 },
+        Control: { type: Number, default: 0 },
+        Kick: { type: Number, default: 0 },
+        Pressure: { type: Number, default: 0 },
+        Physical: { type: Number, default: 0 },
+        Agility: { type: Number, default: 0 },
+        Intelligence: { type: Number, default: 0 }
     },
     
     techniques: [{

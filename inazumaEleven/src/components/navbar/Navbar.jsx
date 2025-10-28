@@ -93,7 +93,7 @@ const Navbar = () => {
           </li>
 
           <li className="navegador-links">
-            <Link className={location.pathname === "/CrearEquipo" ? "enlaceActivo" : "enlace"} 
+            <Link className={location.pathname === "/crearEquipo" ? "enlaceActivo" : "enlace"}
             to={"/crearEquipo"} onClick={toggleMenu}>
               Crear Equipo
             </Link>

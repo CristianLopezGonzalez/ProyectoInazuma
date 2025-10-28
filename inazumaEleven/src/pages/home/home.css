@@ -1,22 +1,22 @@
-/* Estilos base (Mobile First - desde 320px) */
+/* Estilos base*/
 .home-imagenes {
   width: 100%;
-  height: 400px;
+  height: 850px;
   overflow: hidden;
   position: relative;
 }
 
 .home-logo {
   display: flex;
-  top: 10%;
-  left: 20px;
+  top: 35%;
+  left: 80px;
   position: absolute;
   z-index: 199;
-  width: 120px;
+  width: 280px;
 }
 
 .home-logo img {
-  width: 100%;
+  width: 500%;
   height: auto;
 }
 
@@ -41,109 +41,177 @@
   display: block;
 }
 
-/* ============================================
-   MEDIA QUERIES
-   ============================================ */
+.separador {
+  position: relative;
+  height: 46px;
+  background: linear-gradient(135deg,
+      rgba(243, 164, 61, 0.7) 0%,
+      rgba(255, 145, 0, 0.856) 40%,
+      rgba(255, 0, 0, 0.801) 100%);
+  overflow: visible;
+  z-index: 100;
+}
 
-/* Móviles pequeños (landscape) */
-@media (min-width: 480px) {
-  .home-imagenes {
-    height: 450px;
+.fotoSeparador {
+  z-index: 201;
+  position: absolute;
+  margin-top: -95px;
+  padding: 20px;
+  width: 700px;
+  background-color: rgba(0, 0, 0, 0.712);
+}
+
+
+/* VIDEOS */
+
+.home-videos {
+  background-image:
+    url('bg_soccer_pat.png'),
+    linear-gradient(135deg,
+      rgba(61, 200, 243, 1) 0%,
+      rgba(0, 163, 227, 1) 40%,
+      rgba(24, 0, 143, 1) 100%);
+  background-repeat: repeat;
+  background-size: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 100px 60px;
+  text-align: center;
+}
+
+.trailer {
+  background-color: rgba(255, 255, 255, 0.534);
+  padding: 20px;
+  border-radius: 20px;
+  width: 360px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.trailer:hover {
+  background-color: rgba(255, 255, 255, 0.822);
+}
+
+.trailer iframe {
+  width: 100%;
+  height: 202px;
+  border-radius: 16px;
+  border: none;
+}
+
+.trailer h2 {
+  color: rgb(0, 0, 0);
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.video-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 202px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.video-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+.video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3));
+}
+
+.play-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.video-thumbnail:hover .play-button {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+
+
+/* responsiv */
+@media (max-width: 1024px) {
+  .home-videos {
+    padding: 60px 30px;
+    gap: 30px;
   }
 
-  .home-logo {
-    width: 140px;
-    top: 35%;
-    left: 90px;
+  .trailer {
+    width: 300px;
+  }
+
+  .fotoSeparador {
+    width: 600px;
+    margin-top: -50px;
+    padding: 15px;
+  }
+
+  .video-thumbnail {
+    height: 168px;
   }
 }
 
-/* Tablets pequeñas (portrait) */
-@media (min-width: 576px) {
-  .home-imagenes {
-    height: 500px;
+@media (max-width: 768px) {
+  .home-videos {
+    flex-direction: column;
+    align-items: center;
   }
 
-  .home-logo {
-    width: 160px;
-    top: 35%;
-    left: 90px;
-  }
-}
-
-/* Tablets (portrait) */
-@media (min-width: 768px) {
-  .home-imagenes {
-    height: 550px;
+  .trailer {
+    width: 90%;
   }
 
-  .home-logo {
-    width: 180px;
-    top: 35%;
-    left: 90px;
-  }
-}
-
-/* Tablets (landscape) y escritorio pequeño */
-@media (min-width: 992px) {
-  .home-imagenes {
-    height: 600px;
+  .trailer iframe,
+  .video-thumbnail {
+    height: 220px;
   }
 
-  .home-logo {
-    width: 200px;
-    top: 35%;
-    left: 90px;
+  .fotoSeparador {
+    width: 90%;
+    max-width: 500px;
+    margin-top: -40px;
+    padding: 15px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
-/* Escritorio mediano */
-@media (min-width: 1200px) {
-  .home-imagenes {
-    height: 650px;
+@media (max-width: 480px) {
+  .fotoSeparador {
+    width: 95%;
+    margin-top: -30px;
+    padding: 10px;
   }
 
-  .home-logo {
-    width: 220px;
-    top: 35%;
-    left: 90px;
-  }
-}
-
-/* Escritorio grande */
-@media (min-width: 1400px) {
-  .home-imagenes {
-    height: 700px;
-  }
-
-  .home-logo {
-    width: 240px;
-    top: 35%;
-    left: 90px;
-  }
-}
-
-/* Pantallas extra grandes (Full HD y superiores) */
-@media (min-width: 1920px) {
-  .home-imagenes {
-    height: 800px;
-  }
-
-  .home-logo {
-    width: 280px;
-    left: 80px;
-  }
-}
-
-/* Ajustes específicos para dispositivos en landscape */
-@media (max-height: 500px) and (orientation: landscape) {
-  .home-imagenes {
-    height: 100vh;
-  }
-
-  .home-logo {
-    top: 10%;
-    width: 100px;
-    left: 20px;
+  .play-button {
+    width: 70px;
+    height: 70px;
   }
 }
