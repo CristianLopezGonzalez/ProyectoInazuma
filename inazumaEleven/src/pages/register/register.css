@@ -117,7 +117,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url("bg_main04.webp");
+  background-image: url("/bg_main04.webp");
   background-position: center;
   
 }

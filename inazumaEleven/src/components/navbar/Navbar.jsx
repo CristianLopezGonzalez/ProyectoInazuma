@@ -40,7 +40,7 @@ const Navbar = () => {
   return (
     <div className="menu-desplegable">
       <img
-        src="btn_menu_sp.png"
+        src="/btn_menu_sp.png"
         alt="boton"
         className="boton-menu"
         onClick={toggleMenu}

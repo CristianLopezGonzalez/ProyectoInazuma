@@ -8,7 +8,7 @@
 .login-parte-derecha{
  width: 50%;
  height: 100vh;
- background-image: url("fondo1.webp");
+ background-image: url("/fondo1.webp");
  background-position: 72% 40%;
  background-size: cover;
 }

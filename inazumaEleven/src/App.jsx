@@ -8,6 +8,7 @@ import Jugadores from './pages/jugadores/Jugadores'
 import Objetos from './pages/objetos/Objetos'
 import CrearEquipo from './pages/crearEquipo/CrearEquipo'
 import Equipos from './pages/equipos/Equipo'
+import DetalleJugador from './pages/jugadores/DetalleJugador'
 
 
 const ProtectedLayout = () => {
@@ -32,6 +33,7 @@ const App = () => {
           <Route path='/home' element={<Home />} />
           <Route path='/jugadores' element={<Jugadores />} />
           <Route path='/objetos' element={<Objetos />} />
+          <Route path='/jugador/:id' element={<DetalleJugador />} />
           <Route path='/crearEquipo' element={<CrearEquipo />} />
           <Route path='/equipos' element={<Equipos />} />
         </Route>
