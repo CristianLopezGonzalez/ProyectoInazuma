@@ -2,57 +2,65 @@ import express from 'express';
 import { query } from 'express-validator';
 import { protect, isAdmin } from '../middlewares/authMiddleware.js';
 import {
-    getAllPlayers,
-    getCoaches,
-    getPlayerById,
-    createPlayer,
-    updatePlayer,
-    deletePlayer,
+  getAllPlayers,
+  getOnlyPlayers,
+  getCoaches,
+  getPlayerById,
+  createPlayer,
+  updatePlayer,
+  deletePlayer,
+  getPlayersStats,
 } from '../controllers/playerController.js';
+
 const router = express.Router();
 
-// Validaciones para filtros
+// Validaciones de filtros
 const filterValidation = [
-    query('role')
-        .optional()
-        .isIn(['player', 'coach'])
-        .withMessage('El rol debe ser "player" o "coach"'),
-
-    query('position')
-        .optional()
-        .isIn(['GK', 'DF', 'MF', 'FW'])
-        .withMessage('Posición inválida'),
-
-    query('element')
-        .optional()
-        .isIn(['Fire', 'Wind', 'Wood', 'Mountain'])
-        .withMessage('Elemento inválido'),
-
-    query('search')
-        .optional()
-        .trim()
-        .isLength({ min: 1, max: 50 })
-        .withMessage('La búsqueda debe tener entre 1 y 50 caracteres')
+  query('role')
+    .optional()
+    .isIn(['jugador', 'entrenador'])
+    .withMessage('El rol debe ser "jugador" o "entrenador"'),
+  query('position')
+    .optional()
+    .isIn(['PR', 'DF', 'MD', 'DL', 'DT'])
+    .withMessage('Posición inválida'),
+  query('element')
+    .optional()
+    .isIn(['montaña', 'fuego', 'bosque', 'viento'])
+    .withMessage('Elemento inválido'),
+  query('gender')
+    .optional()
+    .isIn(['Masculino', 'Femenino'])
+    .withMessage('El género debe ser "Masculino" o "Femenino"'),
+  query('gameVersion')
+    .optional()
+    .isIn(['IE1', 'IE2', 'IE3', 'IEGO', 'IEGOCS', 'Ares/Orion', 'Victory Road'])
+    .withMessage('Versión de juego inválida'),
+  query('search')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage('La búsqueda debe tener entre 1 y 50 caracteres'),
+  query('page')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('La página debe ser un número mayor a 0'),
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage('El límite debe estar entre 1 y 100'),
 ];
 
-router.use(protect);
-
-// GET /api/players - Obtener todos los jugadores con filtros
+// 🟢 RUTAS PÚBLICAS (sin token)
 router.get('/', filterValidation, getAllPlayers);
-
-// GET /api/players/coaches - Obtener solo entrenadores
+router.get('/only-players', getOnlyPlayers);
 router.get('/coaches', getCoaches);
-
-// GET /api/players/:id - Obtener un jugador específico
+router.get('/stats/overview', getPlayersStats);
 router.get('/:id', getPlayerById);
 
-// POST /api/players (solo admin) - Crear jugador
-router.post('/',isAdmin ,createPlayer);
-
-// PUT /api/players/:id (solo admin) - Actualizar jugador
-router.put('/:id',isAdmin ,updatePlayer);
-
-// DELETE /api/players/:id (solo admin) - Eliminar jugador
-router.delete('/:id',isAdmin, deletePlayer);
+// 🔐 RUTAS PRIVADAS (con token + admin)
+router.post('/', protect, isAdmin, createPlayer);
+router.put('/:id', protect, isAdmin, updatePlayer);
+router.delete('/:id', protect, isAdmin, deletePlayer);
 
 export default router;

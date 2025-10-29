@@ -17,6 +17,9 @@ const Jugadores = () => {
 
   useEffect(() => {
     const loadPlayers = async () => {
+      setCargando(true);
+      setError(null);
+
       try {
         const token = localStorage.getItem("token");
 
@@ -31,27 +34,29 @@ const Jugadores = () => {
 
         const res = await fetch(
           `http://localhost:3000/api/players?${params.toString()}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
+
         const data = await res.json();
 
-        if (!res.ok) {
-          throw new Error("Error en el fetch");
-        }
-
-        if (data.success) {
-          setPlayers(data.players);
-          setPages(data.pages);
-        }
+        if (!res.ok) throw new Error(data.message || "Error al obtener jugadores");
 
         if (!data.players || data.players.length === 0) {
-          throw new Error("No se a encontrado ningun jugador");
+          setPlayers([]);
+          setPages(1);
+          setError(new Error("No se ha encontrado ningún jugador"));
+          return;
         }
 
+        setPlayers(data.players);
+        setPages(data.pages || 1);
       } catch (error) {
-
         setError(error);
-
       } finally {
         setCargando(false);
       }
@@ -60,12 +65,14 @@ const Jugadores = () => {
     loadPlayers();
   }, [page, posicion, elemento, buscarNombre]);
 
-  if (errores) {
-    return <div>Error: {errores.message}</div>;
+  // 🌀 Estado de carga
+  if (cargando) {
+    return <div className="mensaje-carga">Cargando...</div>;
   }
 
-  if (cargando) {
-    return<div>Cargando...</div>;
+  // ⚠️ Mostrar errores
+  if (errores) {
+    return <div className="mensaje-error">{errores.message}</div>;
   }
 
   return (
@@ -84,7 +91,7 @@ const Jugadores = () => {
           />
         </aside>
 
-        {/* Jugadores*/}
+        {/* Jugadores */}
         <main className="lado-derecho">
           <div className="jugadores">
             <div className="players-container">
@@ -92,7 +99,7 @@ const Jugadores = () => {
                 <div key={p._id} className="tarjeta-player">
                   <div className="contenedor-foto-nombre">
                     <div className="contenedor-imagen">
-                      <NavLink to={`/jugador/${p.id}`}>
+                      <NavLink to={`/jugador/${p._id}`}>
                         <img
                           className="imagen-player"
                           src={`http://localhost:3000${p.imageUrl}`}
@@ -107,6 +114,7 @@ const Jugadores = () => {
             </div>
           </div>
 
+          {/* Paginación */}
           <div className="pagination">
             <button
               onClick={() => page > 1 && setPage(page - 1)}
