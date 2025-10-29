@@ -34,7 +34,7 @@ const DetalleJugador = () => {
                     console.log(data.player);
 
                 } else {
-                    throw new Error(data.message || 'Error fetching player data');
+                    throw new Error(data.message || 'No se a encontrado al jugador');
                 }
 
             } catch (error) {
