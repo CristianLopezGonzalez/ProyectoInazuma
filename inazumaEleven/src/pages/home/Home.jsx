@@ -79,7 +79,7 @@ const Home = () => {
               allow="autoplay"
             ></iframe>
           )}
-          <h2>Modo Historia</h2>
+          <h2 style={{color: "white"}}>Modo Historia</h2>
         </div>
 
 
@@ -106,7 +106,7 @@ const Home = () => {
               allow="autoplay"
             ></iframe>
           )}
-          <h2>Modo Crónicas</h2>
+          <h2 style={{color: "white"}}>Modo Crónicas</h2>
         </div>
 
 
@@ -133,7 +133,7 @@ const Home = () => {
               allow="autoplay"
             ></iframe>
           )}
-          <h2>Modo Multijugador</h2>
+          <h2 style={{color: "white"}}>Modo Multijugador</h2>
         </div>
       </div>
 

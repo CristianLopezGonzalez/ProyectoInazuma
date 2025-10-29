@@ -1,4 +1,4 @@
-
+import './filtro.css';
 const Filtro = ({ posicion, setPosicion, elemento, setElemento, setPage, setBuscarNombre, buscarNombre }) => {
 
     const limpiarFiltro = () => {
@@ -48,7 +48,7 @@ const Filtro = ({ posicion, setPosicion, elemento, setElemento, setPage, setBusc
             </select>
 
             <select value={elemento} onChange={applyFilterElemento}>
-                 <option value="">Todas</option>
+                 <option value="">Todos</option>
                 <option value="fuego">Fuego</option>
                 <option value="viento">Viento</option>
                 <option value="montaña">Montaña</option>

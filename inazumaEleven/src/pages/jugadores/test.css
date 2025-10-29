@@ -1,0 +1,308 @@
+.contenedor-principal {
+  background-image: url("/bg_pc.jpg");
+  min-height: 100vh;
+  padding: 20px;
+}
+
+
+.layout-jugadores {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  gap: 30px;
+  min-height: 100vh;
+}
+
+/* Lado izquierdo: filtros */
+.lado-izquierdo {
+
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.164);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 1px rgba(255, 255, 255, 0.2) inset;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+  align-self: start;
+}
+
+/* Lado derecho: tarjetas de jugadores */
+.lado-derecho {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  align-items: center;
+  gap: 30px;
+}
+
+.jugadores {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* === Grid de jugadores === */
+.players-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  width: 100%;
+  padding: 0;
+}
+
+/* === Tarjeta de jugador === */
+.tarjeta-player {
+  background-color: rgba(0, 0, 0, 0.164);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 1px rgba(255, 255, 255, 0.2) inset;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.tarjeta-player:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* === Imagen === */
+.contenedor-imagen {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #ffffff46;
+  border: 3px solid #ffffff;
+  transition: transform 0.3s ease;
+}
+
+.contenedor-imagen:hover {
+  transform: scale(1.05);
+}
+
+.imagen-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* === Nombre del jugador === */
+.nombre-player {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 8px 0 0;
+}
+
+/* === Paginación === */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 24px;
+  background-color: rgba(0, 0, 0, 0.164);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 1px rgba(255, 255, 255, 0.2) inset;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  
+  width: fit-content;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+   background-color: #00000056;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.pagination button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.pagination button:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination span {
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+/* === Filtros === */
+.filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+
+.filtros form {
+  width: 100%;
+}
+
+.filtros input,
+.filtros select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  background-color: #f8fafc;
+  font-family: inherit;
+}
+
+.filtros input:focus,
+.filtros select:focus {
+  border-color: #00000048;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.filtros input::placeholder {
+  color: #94a3b8;
+}
+
+.filtros select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23334155' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.filtros button {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.filtros button:hover {
+  background-color: #00000086;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+}
+
+.filtros button:active {
+  transform: scale(0.98);
+}
+
+/* === Responsive === */
+@media (max-width: 1400px) {
+  .players-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .layout-jugadores {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .lado-izquierdo {
+    position: static;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .filtros {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .filtros h3 {
+    width: 100%;
+    text-align: center;
+  }
+
+  .filtros form,
+  .filtros select {
+    flex: 1;
+    min-width: 180px;
+  }
+
+  .filtros button {
+    width: auto;
+    padding: 12px 24px;
+  }
+
+  .players-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .contenedor-principal {
+    padding: 12px;
+  }
+
+  .players-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .filtros {
+    flex-direction: column;
+  }
+
+  .filtros form,
+  .filtros select,
+  .filtros button {
+    width: 100%;
+  }
+
+  .pagination {
+    width: calc(100% - 24px);
+    gap: 12px;
+  }
+
+  .pagination button {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .pagination span {
+    font-size: 13px;
+  }
+}

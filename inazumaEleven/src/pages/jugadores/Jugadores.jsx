@@ -15,6 +15,7 @@ const Jugadores = () => {
   const [elemento, setElemento] = useState("");
   const [buscarNombre, setBuscarNombre] = useState("");
 
+
   useEffect(() => {
     const loadPlayers = async () => {
       setCargando(true);
@@ -25,7 +26,7 @@ const Jugadores = () => {
 
         const params = new URLSearchParams({
           page: page.toString(),
-          limit: "12",
+          limit: "40",
         });
 
         if (elemento) params.append("element", elemento);
@@ -62,24 +63,18 @@ const Jugadores = () => {
       }
     };
 
+
     loadPlayers();
   }, [page, posicion, elemento, buscarNombre]);
 
-  // 🌀 Estado de carga
-  if (cargando) {
-    return <div className="mensaje-carga">Cargando...</div>;
-  }
-
-  // ⚠️ Mostrar errores
-  if (errores) {
-    return <div className="mensaje-error">{errores.message}</div>;
-  }
-
   return (
     <div className="contenedor-principal">
-      <div className="layout-jugadores">
-        {/* Filtros */}
-        <aside className="lado-izquierdo">
+
+
+
+      <div className="contenedor-filtro">
+
+        <aside className="filtro">
           <Filtro
             posicion={posicion}
             elemento={elemento}
@@ -90,31 +85,30 @@ const Jugadores = () => {
             setPage={setPage}
           />
         </aside>
+      </div>
 
-        {/* Jugadores */}
-        <main className="lado-derecho">
-          <div className="jugadores">
-            <div className="players-container">
-              {players.map((p) => (
-                <div key={p._id} className="tarjeta-player">
-                  <div className="contenedor-foto-nombre">
-                    <div className="contenedor-imagen">
-                      <NavLink to={`/jugador/${p._id}`}>
-                        <img
-                          className="imagen-player"
-                          src={`http://localhost:3000${p.imageUrl}`}
-                          alt={p.name}
-                        />
-                      </NavLink>
-                    </div>
-                    <h2 className="nombre-player">{p.name}</h2>
-                  </div>
-                </div>
+
+      <div>
+        {cargando && <div className="mensaje-carga">Cargando...</div>}
+
+        {errores && (<div className="mensaje-error">{errores.message}</div>)}
+      </div>
+
+      <div className="contenedor-jugadores">
+        {!cargando && !errores && (
+
+          <div className="info-jugadores">
+
+            {players.map((p) => (
+
+                <img className="img" src={`http://localhost:3000${p.imageUrl}`} alt={p.name} />
+
               ))}
-            </div>
           </div>
 
-          {/* Paginación */}
+        )}
+
+        {!errores && !cargando && players.length > 0 && (
           <div className="pagination">
             <button
               onClick={() => page > 1 && setPage(page - 1)}
@@ -123,9 +117,7 @@ const Jugadores = () => {
               Anterior
             </button>
 
-            <span>
-              Página {page} de {pages}
-            </span>
+            <span>Página {page} de {pages}</span>
 
             <button
               onClick={() => page < pages && setPage(page + 1)}
@@ -133,8 +125,10 @@ const Jugadores = () => {
             >
               Siguiente
             </button>
+
           </div>
-        </main>
+        )}
+
       </div>
     </div>
   );

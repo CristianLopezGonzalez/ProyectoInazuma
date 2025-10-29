@@ -66,7 +66,7 @@
 
 .home-videos {
   background-image:
-    url('bg_soccer_pat.png'),
+    url('/bg_soccer_pat.png'),
     linear-gradient(135deg,
       rgba(61, 200, 243, 1) 0%,
       rgba(0, 163, 227, 1) 40%,
@@ -74,6 +74,7 @@
   background-repeat: repeat;
   background-size: auto;
   display: flex;
+  
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
@@ -83,16 +84,26 @@
 }
 
 .trailer {
-  background-color: rgba(255, 255, 255, 0.534);
+  
+      background-color: rgba(0, 0, 0, 0.164);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 1px rgba(255, 255, 255, 0.2) inset;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 20px;
   border-radius: 20px;
   width: 360px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  
   transition: background-color 0.3s ease;
 }
 
 .trailer:hover {
-  background-color: rgba(255, 255, 255, 0.822);
+  
+  background-color: rgba(153, 153, 153, 0.164);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 1px rgba(255, 255, 255, 0.2) inset;
+    border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .trailer iframe {
@@ -117,7 +128,10 @@
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease;
+  
 }
+
+
 
 .video-thumbnail:hover {
   transform: scale(1.05);
@@ -128,6 +142,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  
 }
 
 .play-button {
