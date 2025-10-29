@@ -40,16 +40,19 @@ const Filtro = ({ posicion, setPosicion, elemento, setElemento, setPage, setBusc
 
             <select value={posicion} onChange={applyFilterPosicion}>
                 <option value="">Todas</option>
-                <option value="GK">GK</option>
-                <option value="FW">FW</option>
-                <option value="MF">MF</option>
+                <option value="GK">PR</option>
+                <option value="FW">DL</option>
+                <option value="DF">DF</option>
+                <option value="MF">MD</option>
+                <option value="MF">DT</option>
             </select>
 
             <select value={elemento} onChange={applyFilterElemento}>
-                <option value="">Todas</option>
-                <option value="Fire">Fire</option>
-                <option value="Wind">Wind</option>
-                <option value="Mountain">Mountain</option>
+                 <option value="">Todas</option>
+                <option value="Fire">Fuego</option>
+                <option value="Wind">Viento</option>
+                <option value="Mountain">Montaña</option>
+                <option value="Wood">Planta</option>
             </select>
 
 
