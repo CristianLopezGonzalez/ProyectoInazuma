@@ -1,52 +1,517 @@
-/* Asegura que el contenedor principal tenga altura completa */
 .contenedor-principal {
   display: flex;
-  flex-direction: row;
-  align-items: stretch;
   min-height: 100vh;
+ background-color: rgba(168, 217, 255, 0.381);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .contenedor-filtro {
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.459);
+  justify-content: center;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0 3px 5px rgba(0, 0, 0, 0.148);
+  width: 25%;
   min-height: 100vh;
-  background-color: #ffffff;
-  padding: 20px;
+  z-index: 100;
 }
 
 .filtro {
+  display: flex;
+  justify-content: center;
+  background-color: rgb(255, 255, 255);
   position: sticky;
-  top: 20px; /* Deja 20px desde el top al hacer scroll */
+  top: 0;
+  margin-top: 200px;
+  height: fit-content;
+  z-index: 10;
   width: 100%;
 }
 
 .contenedor-jugadores {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* Cambiado a flex-start */
-  align-items: center;
-  
-  min-height: 100vh;
-  background-color: #f0f0f0;
-  
-}
-
-.info-jugadores {
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: antiquewhite;
+  margin-top: 60px;
+  flex-direction: column;
+  padding: 30px;
+  width: 100%;
+  gap: 20px;
+}
+
+.jugador-individual {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 2px solid rgb(207, 207, 207);
+  height: 400px;
+  width: 80%;
+  background-color: white;
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.imagenes-players {
+  width: 150px;
+  background-color: rgba(17, 152, 255, 0.381);
+  border: 2px solid rgb(0, 0, 0);
+  border-radius: 100%;
+  transition: all 0.3s ease;
+}
+
+.cabecera {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.contenedor-nombre {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 1.3em;
+  width: 50%;
+}
+
+.nombre-jugador {
+  font-weight: 600;
+}
+
+.contenedor-imagen {
+  width: 30%;
+}
+
+.descripcion {
+  margin-top: 10px;
+  padding: 10px;
+  text-align: center;
+  font-style: italic;
+}
+
+.imagenes-players:hover {
+  transform: scale(1.05);
+}
+
+.contenedor-estadisticas {
+  margin-top: 10px;
+  display: grid;
+  grid-template-areas: "a b c d e"
+                       "h i j k l";
+  height: 400px;
+}
+
+.stat-contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.nom-stat {
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 1.2em;
+}
+
+.contenedor-nombre-stat {
+  border-top-right-radius: 10px;
+  background-color: #3b82f6;
   width: 100%;
 }
 
-.img {
-  width: 150px;
-  height: 150px;
-  margin: 10px;
+.contenedor-stats {
+  background-color: white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.148);
+  width: 100%;
+}
+
+.stat {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  padding: 25px 35px;
+  background: white;
+  border-radius: 50px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  width: fit-content;
+  border: 2px solid #f0f0f0;
+}
+
+.pagination button {
+  padding: 14px 32px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.95em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  min-width: 130px;
+}
+
+.pagination button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  transition: left 0.4s ease;
+}
+
+.pagination button:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.pagination button:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(15, 15, 15, 0.5);
+}
+
+.pagination button:active:not(:disabled) {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.pagination button:disabled {
+  background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%);
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.pagination span {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #333;
+  padding: 0 20px;
+  background-clip: text;
+  letter-spacing: 0.5px;
+  min-width: 140px;
+  text-align: center;
+} 
+
+/* Media Queries para Responsive - Añadir al final */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 1024px) {
+  .contenedor-filtro {
+    width: 30%;
+  }
+  
+  .jugador-individual {
+    width: 90%;
+  }
+}
+
+/* Rango 800px - Prevención de rotura */
+@media (max-width: 800px) {
+  .contenedor-principal {
+    flex-direction: column;
+  }
+  
+  .contenedor-filtro {
+    width: 100%;
+    min-height: auto;
+  }
+  
+  .filtro {
+    position: relative;
+    margin-top: 20px;
+    padding: 15px;
+  }
+  
+  .contenedor-jugadores {
+    margin-top: 20px;
+    padding: 20px 10px;
+    width: 100%;
+  }
+  
+  .jugador-individual {
+    width: 95%;
+    max-width: 100%;
+    padding: 15px;
+    height: auto;
+    box-sizing: border-box;
+  }
+  
+  .cabecera {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .contenedor-imagen {
+    width: auto;
+    flex-shrink: 0;
+  }
+  
+  .contenedor-nombre {
+    width: auto;
+    flex: 1;
+    min-width: 200px;
+    font-size: 1.2em;
+  }
+  
+  .imagenes-players {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .contenedor-estadisticas {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .stat-contenedor {
+    margin: 5px;
+  }
+  
+  .nom-stat {
+    font-size: 1em;
+    padding: 8px 5px;
+  }
+  
+  .stat {
+    font-size: 1em;
+    padding: 8px;
+  }
+}
+
+/* Tablets pequeñas */
+@media (max-width: 768px) {
+  .jugador-individual {
+    width: 98%;
+  }
+  
+  .pagination {
+    padding: 15px 20px;
+    gap: 10px;
+  }
+  
+  .pagination button {
+    padding: 12px 20px;
+    min-width: 100px;
+  }
+}
+
+/* Rango crítico 600px */
+@media (max-width: 600px) {
+  .jugador-individual {
+    width: 100%;
+    padding: 12px;
+  }
+  
+  .contenedor-jugadores {
+    padding: 15px 8px;
+  }
+  
+  .cabecera {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .contenedor-imagen {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .imagenes-players {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .contenedor-nombre {
+    width: 100%;
+    font-size: 1.1em;
+  }
+  
+  .contenedor-estadisticas {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  .nom-stat {
+    font-size: 0.9em;
+    padding: 6px 3px;
+  }
+  
+  .stat {
+    font-size: 0.95em;
+  }
+  
+  .descripcion {
+    font-size: 0.9em;
+    padding: 8px;
+  }
+}
+
+/* Grid 1 columna desde 500px hasta 0px */
+@media (max-width: 500px) {
+  .contenedor-jugadores {
+    padding: 10px 5px;
+  }
+  
+  .jugador-individual {
+    width: 100%;
+    padding: 12px;
+  }
+  
+  .imagenes-players {
+    width: 110px;
+    height: 110px;
+  }
+  
+  .contenedor-nombre {
+    font-size: 1em;
+  }
+  
+  /* GRID EN 1 COLUMNA */
+  .contenedor-estadisticas {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "a"
+      "b"
+      "c"
+      "d"
+      "e"
+      "h"
+      "i"
+      "j"
+      "k"
+      "l";
+    gap: 8px;
+    height: auto;
+  }
+  
+  .stat-contenedor {
+    margin: 4px 0;
+    width: 100%;
+  }
+  
+  .nom-stat {
+    font-size: 0.95em;
+    padding: 8px 5px;
+  }
+  
+  .stat {
+    font-size: 1em;
+    padding: 8px;
+  }
+  
+  .pagination {
+    flex-direction: column;
+    padding: 15px;
+  }
+  
+  .pagination button {
+    width: 100%;
+  }
+  
+  .pagination span {
+    order: -1;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 400px) {
+  .jugador-individual {
+    padding: 10px;
+  }
+  
+  .contenedor-jugadores {
+    padding: 8px 3px;
+    gap: 12px;
+  }
+  
+  .imagenes-players {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .contenedor-nombre {
+    font-size: 0.95em;
+  }
+  
+  .contenedor-estadisticas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  
+  .nom-stat {
+    font-size: 0.9em;
+    padding: 6px 4px;
+  }
+  
+  .stat {
+    font-size: 0.95em;
+  }
+  
+  .descripcion {
+    font-size: 0.85em;
+    padding: 6px;
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 300px) {
+  .jugador-individual {
+    padding: 8px;
+  }
+  
+  .contenedor-jugadores {
+    padding: 5px 2px;
+    gap: 10px;
+  }
+  
+  .imagenes-players {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .contenedor-nombre {
+    font-size: 0.9em;
+  }
+  
+  .contenedor-estadisticas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+  
+  .nom-stat {
+    font-size: 0.85em;
+    padding: 5px 3px;
+  }
+  
+  .stat {
+    font-size: 0.9em;
+    padding: 6px;
+  }
+  
+  .descripcion {
+    font-size: 0.8em;
+    padding: 5px;
+  }
 }

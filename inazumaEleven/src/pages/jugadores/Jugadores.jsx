@@ -15,7 +15,6 @@ const Jugadores = () => {
   const [elemento, setElemento] = useState("");
   const [buscarNombre, setBuscarNombre] = useState("");
 
-
   useEffect(() => {
     const loadPlayers = async () => {
       setCargando(true);
@@ -26,7 +25,7 @@ const Jugadores = () => {
 
         const params = new URLSearchParams({
           page: page.toString(),
-          limit: "40",
+          limit: "20",
         });
 
         if (elemento) params.append("element", elemento);
@@ -45,7 +44,8 @@ const Jugadores = () => {
 
         const data = await res.json();
 
-        if (!res.ok) throw new Error(data.message || "Error al obtener jugadores");
+        if (!res.ok)
+          throw new Error(data.message || "Error al obtener jugadores");
 
         if (!data.players || data.players.length === 0) {
           setPlayers([]);
@@ -56,6 +56,8 @@ const Jugadores = () => {
 
         setPlayers(data.players);
         setPages(data.pages || 1);
+        console.log(data.players);
+        
       } catch (error) {
         setError(error);
       } finally {
@@ -63,18 +65,13 @@ const Jugadores = () => {
       }
     };
 
-
     loadPlayers();
   }, [page, posicion, elemento, buscarNombre]);
-
+//background-color: rgb(126, 190, 241);
   return (
     <div className="contenedor-principal">
-
-
-
       <div className="contenedor-filtro">
-
-        <aside className="filtro">
+        <div className="filtro">
           <Filtro
             posicion={posicion}
             elemento={elemento}
@@ -84,28 +81,88 @@ const Jugadores = () => {
             setElemento={setElemento}
             setPage={setPage}
           />
-        </aside>
-      </div>
-
-
-      <div>
-        {cargando && <div className="mensaje-carga">Cargando...</div>}
-
-        {errores && (<div className="mensaje-error">{errores.message}</div>)}
+        </div>
       </div>
 
       <div className="contenedor-jugadores">
-        {!cargando && !errores && (
+        <div>
+          {cargando && <div className="mensaje-carga">Cargando...</div>}
+          {errores && <div className="mensaje-error">{errores.message}</div>}
+        </div>
 
-          <div className="info-jugadores">
-
+        {!cargando && !errores && players.length > 0 && (
+          <>
             {players.map((p) => (
+              <div key={p._id} className="jugador-individual">
+                <div className="cabecera">
+                  <div className="contenedor-imagen">
+                    <img className="imagenes-players" src={`http://localhost:3000${p.imageUrl}`} alt={p.name}/>
+                  </div>
+                  <div className="contenedor-nombre">
+                    <h2 className="nombre-jugador">{p.name}</h2>
+                  </div>
+                </div>
 
-                <img className="img" src={`http://localhost:3000${p.imageUrl}`} alt={p.name} />
+                <div className="contenedor-descriptcion">
+                  <div className="descripcion">
+                    <span className="descripcion-player">{p.description}</span>
+                  </div>
+                </div>
 
-              ))}
-          </div>
+                <div className="contenedor-estadisticas">
+                  <div className="stat-contenedor">
+                    <div className="contenedor-nombre-stat"><h2 className="nom-stat">POSICION</h2></div>
+                    <div className="contenedor-stats"><h2 className="stat">{p.position}</h2></div>
+                  </div>
 
+                  <div className="stat-contenedor">
+                    <div className="contenedor-nombre-stat"><h2 className="nom-stat">ELEMENTO</h2></div>
+                    <div className="contenedor-stats"><h2 className="stat">{p.element}</h2></div>
+                  </div>
+
+                  <div className="stat-contenedor">
+                    <div className="contenedor-nombre-stat"><h2 className="nom-stat">Numero</h2></div>
+                    <div className="contenedor-stats"><h2 className="stat">{p.number}</h2></div>
+                  </div>
+
+                  <div className="stat-contenedor">
+                    <div className="contenedor-nombre-stat"><h2 className="nom-stat">agilidad</h2></div>
+                    <div className="contenedor-stats"><h2 className="stat">{p.stats["agilidad"]}</h2></div>
+                  </div>
+
+                  <div className="stat-contenedor">
+                    <div className="contenedor-nombre-stat"><h2 className="nom-stat">control</h2></div>
+                    <div className="contenedor-stats"><h2 className="stat">{p.stats["control"]}</h2></div>
+                  </div>
+
+                  <div className="stat-contenedor">
+                    <div className="contenedor-nombre-stat"><h2 className="nom-stat">inteligencia</h2></div>
+                    <div className="contenedor-stats"><h2 className="stat">{p.stats["inteligencia"]}</h2></div>
+                  </div>
+
+                  <div className="stat-contenedor">
+                    <div className="contenedor-nombre-stat"><h2 className="nom-stat">fisico</h2></div>
+                    <div className="contenedor-stats"><h2 className="stat">{p.stats["fisico"]}</h2></div>
+                  </div>
+
+                  <div className="stat-contenedor">
+                    <div className="contenedor-nombre-stat"><h2 className="nom-stat">patada</h2></div>
+                    <div className="contenedor-stats"><h2 className="stat">{p.stats["patada"]}</h2></div>
+                  </div>
+
+                  <div className="stat-contenedor">
+                    <div className="contenedor-nombre-stat"><h2 className="nom-stat">precision</h2></div>
+                    <div className="contenedor-stats"><h2 className="stat">{p.stats["precision"]}</h2></div>
+                  </div>
+
+                  <div className="stat-contenedor">
+                    <div className="contenedor-nombre-stat"><h2 className="nom-stat">tecnica</h2></div>
+                    <div className="contenedor-stats"><h2 className="stat">{p.stats["tecnica"]}</h2></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </>
         )}
 
         {!errores && !cargando && players.length > 0 && (
@@ -117,7 +174,9 @@ const Jugadores = () => {
               Anterior
             </button>
 
-            <span>Página {page} de {pages}</span>
+            <span>
+              Página {page} de {pages}
+            </span>
 
             <button
               onClick={() => page < pages && setPage(page + 1)}
@@ -125,10 +184,8 @@ const Jugadores = () => {
             >
               Siguiente
             </button>
-
           </div>
         )}
-
       </div>
     </div>
   );
