@@ -1,4 +1,5 @@
 import Team from "../models/Team.js";
+import Player from "../models/Player.js";
 import { validationResult } from "express-validator";
 
 // @desc    Obtener todos los equipos con filtros
@@ -14,26 +15,19 @@ export const getAllTeams = async (req, res) => {
       });
     }
 
-    const { gameVersion, search, page = 1, limit = 50 } = req.query;
+    const { search, page = 1, limit = 50 } = req.query;
 
-    // Construir filtros
     const filters = {};
+    if (search) filters.name = { $regex: search, $options: "i" };
 
-    if (gameVersion) filters.gameVersion = gameVersion;
-    if (search) {
-      filters.name = { $regex: search, $options: "i" };
-    }
-
-    // Calcular skip para paginación
     const skip = (page - 1) * limit;
 
-    // Obtener equipos
     const teams = await Team.find(filters)
+      .populate("coach players createdBy")
       .limit(parseInt(limit))
       .skip(skip)
       .sort({ name: 1 });
 
-    // Contar total
     const total = await Team.countDocuments(filters);
 
     res.json({
@@ -59,7 +53,7 @@ export const getAllTeams = async (req, res) => {
 // @access  Public
 export const getTeamById = async (req, res) => {
   try {
-    const team = await Team.findById(req.params.id);
+    const team = await Team.findById(req.params.id).populate("coach players createdBy");
 
     if (!team) {
       return res.status(404).json({
@@ -90,37 +84,84 @@ export const getTeamById = async (req, res) => {
   }
 };
 
-// @desc    Crear equipo (solo admin)
+// @desc    Crear equipo (usuarios normales)
 // @route   POST /api/teams
-// @access  Private/Admin
+// @access  Private/User
 export const createTeam = async (req, res) => {
   try {
-    const team = await Team.create(req.body);
+    const { name, logo, coach, players, formation } = req.body;
+
+    // 1️⃣ Validar coach
+    const coachData = await Player.findById(coach);
+    if (!coachData || coachData.role !== "coach") {
+      return res.status(400).json({
+        success: false,
+        message: "El coach no existe o no tiene el rol correcto",
+      });
+    }
+
+    // 2️⃣ Validar jugadores
+    if (!players || players.length < 16) {
+      return res.status(400).json({
+        success: false,
+        message: "El equipo debe tener al menos 16 jugadores",
+      });
+    }
+
+    const playerDocs = await Player.find({ _id: { $in: players } });
+
+    if (playerDocs.length !== players.length) {
+      return res.status(400).json({
+        success: false,
+        message: "Algunos jugadores no existen",
+      });
+    }
+
+    const invalidPlayers = playerDocs.filter(p => p.role !== "player");
+    if (invalidPlayers.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Todos los jugadores deben tener rol 'player'",
+      });
+    }
+
+    // 3️⃣ Validar duplicados
+    const uniquePlayers = new Set(players.map(id => id.toString()));
+    if (uniquePlayers.size !== players.length) {
+      return res.status(400).json({
+        success: false,
+        message: "No se pueden repetir jugadores en el equipo",
+      });
+    }
+
+    // 4️⃣ Coach no puede estar en players
+    if (players.includes(coach)) {
+      return res.status(400).json({
+        success: false,
+        message: "El coach no puede estar dentro de los jugadores",
+      });
+    }
+
+    // 5️⃣ Crear equipo
+    const team = await Team.create({
+      name,
+      logo,
+      coach,
+      players,
+      formation,
+      createdBy: req.user._id // el usuario logueado
+    });
+
+    // 6️⃣ Retornar con populate
+    const populatedTeam = await Team.findById(team._id).populate("coach players createdBy");
 
     res.status(201).json({
       success: true,
       message: "Equipo creado exitosamente",
-      team,
+      team: populatedTeam,
     });
   } catch (error) {
     console.error("Error en createTeam:", error);
-
-    if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        message: "Ya existe un equipo con ese nombre",
-      });
-    }
-
-    if (error.name === "ValidationError") {
-      const messages = Object.values(error.errors).map((err) => err.message);
-      return res.status(400).json({
-        success: false,
-        message: "Error de validación",
-        errors: messages,
-      });
-    }
-
     res.status(500).json({
       success: false,
       message: "Error al crear equipo",
@@ -129,15 +170,12 @@ export const createTeam = async (req, res) => {
   }
 };
 
-// @desc    Actualizar equipo (solo admin)
+// @desc    Actualizar equipo
 // @route   PUT /api/teams/:id
-// @access  Private/Admin
+// @access  Private/User (solo creador)
 export const updateTeam = async (req, res) => {
   try {
-    const team = await Team.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const team = await Team.findById(req.params.id);
 
     if (!team) {
       return res.status(404).json({
@@ -146,23 +184,26 @@ export const updateTeam = async (req, res) => {
       });
     }
 
-    res.json({
-      success: true,
-      message: "Equipo actualizado exitosamente",
-      team,
-    });
-  } catch (error) {
-    console.error("Error en updateTeam:", error);
-
-    if (error.name === "ValidationError") {
-      const messages = Object.values(error.errors).map((err) => err.message);
-      return res.status(400).json({
+    // Validar que el usuario logueado sea el creador
+    if (team.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
         success: false,
-        message: "Error de validación",
-        errors: messages,
+        message: "No tienes permiso para actualizar este equipo",
       });
     }
 
+    Object.assign(team, req.body);
+    await team.save();
+
+    const populatedTeam = await Team.findById(team._id).populate("coach players createdBy");
+
+    res.json({
+      success: true,
+      message: "Equipo actualizado exitosamente",
+      team: populatedTeam,
+    });
+  } catch (error) {
+    console.error("Error en updateTeam:", error);
     res.status(500).json({
       success: false,
       message: "Error al actualizar equipo",
@@ -171,12 +212,12 @@ export const updateTeam = async (req, res) => {
   }
 };
 
-// @desc    Eliminar equipo (solo admin)
+// @desc    Eliminar equipo
 // @route   DELETE /api/teams/:id
-// @access  Private/Admin
+// @access  Private/User (solo creador)
 export const deleteTeam = async (req, res) => {
   try {
-    const team = await Team.findByIdAndDelete(req.params.id);
+    const team = await Team.findById(req.params.id);
 
     if (!team) {
       return res.status(404).json({
@@ -184,6 +225,15 @@ export const deleteTeam = async (req, res) => {
         message: "Equipo no encontrado",
       });
     }
+
+    if (team.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "No tienes permiso para eliminar este equipo",
+      });
+    }
+
+    await team.deleteOne();
 
     res.json({
       success: true,
@@ -199,34 +249,6 @@ export const deleteTeam = async (req, res) => {
   }
 };
 
-// @desc    Obtener estadísticas generales de equipos
-// @route   GET /api/teams/stats/overview
-// @access  Public
-export const getTeamsStats = async (req, res) => {
-  try {
-    const totalTeams = await Team.countDocuments();
-
-    const teamsByGameVersion = await Team.aggregate([
-      { $match: { gameVersion: { $ne: null } } },
-      { $group: { _id: "$gameVersion", count: { $sum: 1 } } },
-    ]);
-
-    res.json({
-      success: true,
-      stats: {
-        totalTeams,
-        byGameVersion: teamsByGameVersion,
-      },
-    });
-  } catch (error) {
-    console.error("Error en getTeamsStats:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error al obtener estadísticas",
-      error: error.message,
-    });
-  }
-};
 
 export default {
   getAllTeams,
@@ -234,5 +256,5 @@ export default {
   createTeam,
   updateTeam,
   deleteTeam,
-  getTeamsStats,
+  
 };

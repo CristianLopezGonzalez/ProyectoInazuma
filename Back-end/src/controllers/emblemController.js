@@ -5,18 +5,7 @@ import Emblem from '../models/Emblem.js';
 // @access  Public
 export const getAllEscudos = async (req, res) => {
     try {
-        const { gameVersion } = req.query;
-
-        // Construir filtros
-        const filters = { isAvailable: true };
-        if (gameVersion) {
-            filters.$or = [
-                { gameVersion: gameVersion },
-                { gameVersion: 'All' }
-            ];
-        }
-
-        const emblems = await Emblem.find(filters).sort({ name: 1 });
+        const emblems = await Emblem.find().sort({ name: 1 });
 
         res.json({
             success: true,
@@ -25,7 +14,7 @@ export const getAllEscudos = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error en getAllEmblems:', error);
+        console.error('Error en getAllEscudos:', error);
         res.status(500).json({
             success: false,
             message: 'Error al obtener escudos',
@@ -54,8 +43,8 @@ export const getEscudoById = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error en getEmblemById:', error);
-        
+        console.error('Error en getEscudoById:', error);
+
         if (error.kind === 'ObjectId') {
             return res.status(404).json({
                 success: false,
@@ -76,7 +65,16 @@ export const getEscudoById = async (req, res) => {
 // @access  Private/Admin
 export const createEscudo = async (req, res) => {
     try {
-        const emblem = await Emblem.create(req.body);
+        const { name, imageUrl } = req.body;
+
+        if (!name || !imageUrl) {
+            return res.status(400).json({
+                success: false,
+                message: 'El nombre y la imagen son obligatorios'
+            });
+        }
+
+        const emblem = await Emblem.create({ name, imageUrl });
 
         res.status(201).json({
             success: true,
@@ -85,8 +83,8 @@ export const createEscudo = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error en createEmblem:', error);
-        
+        console.error('Error en createEscudo:', error);
+
         if (error.code === 11000) {
             return res.status(400).json({
                 success: false,
@@ -102,73 +100,8 @@ export const createEscudo = async (req, res) => {
     }
 };
 
-// @desc    Actualizar escudo (solo admin)
-// @route   PUT /api/emblems/:id
-// @access  Private/Admin
-export const updateEscudo = async (req, res) => {
-    try {
-        const emblem = await Emblem.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true, runValidators: true }
-        );
-
-        if (!emblem) {
-            return res.status(404).json({
-                success: false,
-                message: 'Escudo no encontrado'
-            });
-        }
-
-        res.json({
-            success: true,
-            message: 'Escudo actualizado exitosamente',
-            emblem
-        });
-
-    } catch (error) {
-        console.error('Error en updateEmblem:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error al actualizar escudo',
-            error: error.message
-        });
-    }
-};
-
-// @desc    Eliminar escudo (solo admin)
-// @route   DELETE /api/emblems/:id
-// @access  Private/Admin
-export const deleteEscudo = async (req, res) => {
-    try {
-        const emblem = await Emblem.findByIdAndDelete(req.params.id);
-
-        if (!emblem) {
-            return res.status(404).json({
-                success: false,
-                message: 'Escudo no encontrado'
-            });
-        }
-
-        res.json({
-            success: true,
-            message: 'Escudo eliminado exitosamente'
-        });
-
-    } catch (error) {
-        console.error('Error en deleteEmblem:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error al eliminar escudo',
-            error: error.message
-        });
-    }
-};
-
 export default {
     getAllEscudos,
     getEscudoById,
     createEscudo,
-    updateEscudo,
-    deleteEscudo
 };

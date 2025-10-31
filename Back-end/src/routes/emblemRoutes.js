@@ -4,8 +4,6 @@ import {
     getAllEscudos,
     getEscudoById,
     createEscudo,
-    updateEscudo,
-    deleteEscudo
 } from '../controllers/emblemController.js';
 
 const router = express.Router();
@@ -16,16 +14,10 @@ router.get('/', getAllEscudos);
 // GET /api/emblems/:id - Obtener un escudo específico (público)
 router.get('/:id', getEscudoById);
 
-// Rutas protegidas (solo admin)
+// Rutas protegidas (solo admin para creación)
 router.use(protect, isAdmin);
 
 // POST /api/emblems - Crear escudo
 router.post('/', createEscudo);
-
-// PUT /api/emblems/:id - Actualizar escudo
-router.put('/:id', updateEscudo);
-
-// DELETE /api/emblems/:id - Eliminar escudo
-router.delete('/:id', deleteEscudo);
 
 export default router;

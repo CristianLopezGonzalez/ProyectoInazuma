@@ -1,24 +1,18 @@
 import express from 'express';
 import { query, body, param } from 'express-validator';
-import { protect, isAdmin } from '../middlewares/authMiddleware.js';
+import { protect } from '../middlewares/authMiddleware.js';
 import {
     getAllTeams,
     getTeamById,
     createTeam,
     updateTeam,
-    deleteTeam,
-    getTeamsStats
+    deleteTeam
 } from '../controllers/teamController.js';
 
 const router = express.Router();
 
 // Validaciones para filtros
 const filterValidation = [
-    query('gameVersion')
-        .optional()
-        .isIn(['IE1', 'IE2', 'IE3', 'IEGO', 'IEGOCS', 'Ares/Orion', 'victory Road'])
-        .withMessage('Versión de juego inválida'),
-
     query('search')
         .optional()
         .trim()
@@ -44,33 +38,24 @@ const teamValidation = [
         .withMessage('El nombre del equipo es obligatorio')
         .isLength({ min: 3, max: 50 })
         .withMessage('El nombre debe tener entre 3 y 50 caracteres'),
-    
-    body('imageUrl')
-        .notEmpty()
-        .withMessage('La imagen del equipo es obligatoria')
-        .isURL()
-        .withMessage('Debe ser una URL válida'),
-    
-    body('emblemUrl')
-        .notEmpty()
-        .withMessage('El escudo del equipo es obligatorio')
-        .isURL()
-        .withMessage('Debe ser una URL válida'),
-    
-    body('description')
-        .optional()
-        .trim()
-        .isLength({ max: 500 })
-        .withMessage('La descripción no puede tener más de 500 caracteres'),
 
-    body('gameVersion')
-        .optional()
-        .isIn(['IE1', 'IE2', 'IE3', 'IEGO', 'IEGOCS', 'Ares/Orion', 'victory Road'])
-        .withMessage('Versión de juego inválida')
+    body('logo')
+        .notEmpty()
+        .withMessage('El logo del equipo es obligatorio'),
+
+    body('coach')
+        .notEmpty()
+        .withMessage('El entrenador es obligatorio'),
+
+    body('players')
+        .isArray({ min: 16 })
+        .withMessage('El equipo debe tener al menos 16 jugadores'),
+
+    body('formation')
+        .notEmpty()
+        .isIn(["3-5-2", "4-4-2", "4-3-3", "4-5-1", "3-6-1", "5-4-1"])
+        .withMessage('Formación inválida')
 ];
-
-// GET /api/teams/stats/overview - Obtener estadísticas generales
-router.get('/stats/overview', getTeamsStats);
 
 // GET /api/teams - Obtener todos los equipos con filtros
 router.get('/', filterValidation, getAllTeams);
@@ -78,17 +63,16 @@ router.get('/', filterValidation, getAllTeams);
 // GET /api/teams/:id - Obtener un equipo específico
 router.get('/:id', getTeamById);
 
-// Rutas protegidas (solo admin)
+// Rutas protegidas (usuarios logueados)
 router.use(protect);
-router.use(isAdmin);
 
 // POST /api/teams - Crear equipo
 router.post('/', teamValidation, createTeam);
 
-// PUT /api/teams/:id - Actualizar equipo
+// PUT /api/teams/:id - Actualizar equipo (solo creador)
 router.put('/:id', teamValidation, updateTeam);
 
-// DELETE /api/teams/:id - Eliminar equipo
+// DELETE /api/teams/:id - Eliminar equipo (solo creador)
 router.delete('/:id', deleteTeam);
 
 export default router;
