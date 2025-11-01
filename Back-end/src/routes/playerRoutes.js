@@ -7,9 +7,6 @@ import {
   getCoaches,
   getPlayerById,
   createPlayer,
-  updatePlayer,
-  deletePlayer,
-  getPlayersStats,
 } from '../controllers/playerController.js';
 
 const router = express.Router();
@@ -51,16 +48,13 @@ const filterValidation = [
     .withMessage('El límite debe estar entre 1 y 100'),
 ];
 
-// 🟢 RUTAS PÚBLICAS (sin token)
-router.get('/', filterValidation, getAllPlayers);
-router.get('/only-players', getOnlyPlayers);
-router.get('/coaches', getCoaches);
-router.get('/stats/overview', getPlayersStats);
-router.get('/:id', getPlayerById);
 
-// 🔐 RUTAS PRIVADAS (con token + admin)
+router.get('/', filterValidation,protect, getAllPlayers);
+router.get('/only-players',protect, getOnlyPlayers);
+router.get('/coaches',protect, getCoaches);
+router.get('/:id',protect, getPlayerById);
+
+
 router.post('/', protect, isAdmin, createPlayer);
-router.put('/:id', protect, isAdmin, updatePlayer);
-router.delete('/:id', protect, isAdmin, deletePlayer);
 
 export default router;
